@@ -34,8 +34,6 @@ const io = new Server(server, {
       if (Array.isArray(data.to)) {
         data.to.forEach((userId) => {
           const sendUserSocket = onlineUsers.get(userId);
-          console.log(userId);
-          console.log(sendUserSocket);
           if (sendUserSocket) {
             socket.to(sendUserSocket).emit('msg-receive', data);
           }

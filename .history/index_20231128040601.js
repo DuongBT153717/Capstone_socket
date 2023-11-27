@@ -22,26 +22,12 @@ const io = new Server(server, {
       console.log('Online Users:', onlineUsers);
     });
 
-    // socket.on('send-msg', (data) => {
-    //     const sendUserSocket = onlineUsers.get(data.to)
-    //     console.log(data.to);
-    //     console.log(sendUserSocket);
-    //     if(sendUserSocket){
-    //         socket.to(sendUserSocket).emit('msg-receive', data)
-    //     }
-    // })
     socket.on('send-msg', (data) => {
-      if (Array.isArray(data.to)) {
-        data.to.forEach((userId) => {
-          const sendUserSocket = onlineUsers.get(userId);
-          console.log(userId);
-          console.log(sendUserSocket);
-          if (sendUserSocket) {
-            socket.to(sendUserSocket).emit('msg-receive', data);
-          }
-        });
-      }
-    });
+        const sendUserSocket = onlineUsers.get(data.to)
+        if(sendUserSocket){
+            socket.to(sendUserSocket).emit('msg-receive', data)
+        }
+    })
   })
 
   server.listen(3001, () => {
