@@ -61,7 +61,6 @@ const io = new Server(server, {
 
      socket.on('send-notification', (data) => {
         const sendUserSocket = onlineUsers.get(data.receiverId)
-        console.log(data);
         console.log(sendUserSocket);
         if(sendUserSocket){
             socket.to(sendUserSocket).emit('notification-receive', data)

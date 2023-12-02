@@ -41,11 +41,6 @@ const io = new Server(server, {
     //   }
     // });
 
-    socket.on("join-chat", (room) => {
-      socket.join(room);
-      console.log("User Joined Room: " + room);
-    });
-
     socket.on('send-msg', (data) => {
       if (Array.isArray(data.to)) {
         data.to.forEach((userId) => {
@@ -58,16 +53,6 @@ const io = new Server(server, {
         });
       }
     });
-
-     socket.on('send-notification', (data) => {
-        const sendUserSocket = onlineUsers.get(data.receiverId)
-        console.log(data);
-        console.log(sendUserSocket);
-        if(sendUserSocket){
-            socket.to(sendUserSocket).emit('notification-receive', data)
-        }
-    })
-
   })
 
   server.listen(3001, () => {

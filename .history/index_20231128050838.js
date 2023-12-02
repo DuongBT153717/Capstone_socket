@@ -30,20 +30,15 @@ const io = new Server(server, {
     //         socket.to(sendUserSocket).emit('msg-receive', data)
     //     }
     // })
-    // socket.on('disconnect', () => {
-    //   // Handle user disconnection by removing their entry from the onlineUsers map
-    //   for (const [userId, userSocketId] of onlineUsers.entries()) {
-    //     if (userSocketId === socket.id) {
-    //       onlineUsers.delete(userId);
-    //       console.log(`User disconnected: ${userId}`);
-    //       break;
-    //     }
-    //   }
-    // });
-
-    socket.on("join-chat", (room) => {
-      socket.join(room);
-      console.log("User Joined Room: " + room);
+    socket.on('disconnect', () => {
+      // Handle user disconnection by removing their entry from the onlineUsers map
+      for (const [userId, userSocketId] of onlineUsers.entries()) {
+        if (userSocketId === socket.id) {
+          onlineUsers.delete(userId);
+          console.log(`User disconnected: ${userId}`);
+          break;
+        }
+      }
     });
 
     socket.on('send-msg', (data) => {
@@ -58,16 +53,6 @@ const io = new Server(server, {
         });
       }
     });
-
-     socket.on('send-notification', (data) => {
-        const sendUserSocket = onlineUsers.get(data.receiverId)
-        console.log(data);
-        console.log(sendUserSocket);
-        if(sendUserSocket){
-            socket.to(sendUserSocket).emit('notification-receive', data)
-        }
-    })
-
   })
 
   server.listen(3001, () => {

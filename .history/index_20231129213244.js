@@ -46,28 +46,26 @@ const io = new Server(server, {
       console.log("User Joined Room: " + room);
     });
 
-    socket.on('send-msg', (data) => {
-      if (Array.isArray(data.to)) {
-        data.to.forEach((userId) => {
-          const sendUserSocket = onlineUsers.get(userId);
-          console.log(userId);
-          console.log(sendUserSocket);
-          if (sendUserSocket) {
-            socket.to(sendUserSocket).emit('msg-receive', data);
-          }
-        });
-      }
+    // socket.on('send-msg', (data) => {
+    //   if (Array.isArray(data.to)) {
+    //     data.to.forEach((userId) => {
+    //       const sendUserSocket = onlineUsers.get(userId);
+    //       console.log(userId);
+    //       console.log(sendUserSocket);
+    //       if (sendUserSocket) {
+    //         socket.to(sendUserSocket).emit('msg-receive', data);
+    //       }
+    //     });
+    //   }
+    // });
+
+    socket.on("send-msg", (data) => {
+      data.to.forEach((userId) => {
+        if (userId == data.senderId) return;
+  
+        socket.in(userId).emit("msg-receive", data);
+      });
     });
-
-     socket.on('send-notification', (data) => {
-        const sendUserSocket = onlineUsers.get(data.receiverId)
-        console.log(data);
-        console.log(sendUserSocket);
-        if(sendUserSocket){
-            socket.to(sendUserSocket).emit('notification-receive', data)
-        }
-    })
-
   })
 
   server.listen(3001, () => {

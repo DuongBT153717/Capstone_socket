@@ -59,15 +59,13 @@ const io = new Server(server, {
       }
     });
 
-     socket.on('send-notification', (data) => {
-        const sendUserSocket = onlineUsers.get(data.receiverId)
-        console.log(data);
-        console.log(sendUserSocket);
-        if(sendUserSocket){
-            socket.to(sendUserSocket).emit('notification-receive', data)
-        }
-    })
-
+    socket.on("send-msg", (data) => {
+      data.to.forEach((userId) => {
+        if (userId == data.senderId) return;
+  
+        socket.in(user._id).emit("message recieved", newMessageRecieved);
+      });
+    });
   })
 
   server.listen(3001, () => {
